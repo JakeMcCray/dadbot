@@ -8,7 +8,7 @@ use serenity::{
     model::prelude::*,
     Client, 
 };
-use std::env;
+use serenity::model::application::command::Command;
 
 struct Handler;
 
@@ -53,6 +53,7 @@ impl EventHandler for Handler {
     async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
 
+        /*
         let guild_id = GuildId(
             env::var("GUILD_ID")
                 .expect("Expected GUILD_ID in environment")
@@ -67,13 +68,14 @@ impl EventHandler for Handler {
         .await;
 
         println!("I now have the following guild slash commands: {:#?}", commands);
+        */
 
-/*        let guild_command = Command::create_global_application_command(&ctx.http, |command| {
-            commands::wonderful_command::register(command)
+        let guild_command = Command::create_global_application_command(&ctx.http, |command| {
+            commands::joke::register(command)
         })
         .await;
 
-        println!("I created the following global slash command: {:#?}", guild_command);*/
+        println!("I created the following global slash command: {:#?}", guild_command);
     }
 }
 

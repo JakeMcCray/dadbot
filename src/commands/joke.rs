@@ -1,5 +1,4 @@
 use std::fs;
-use std::str::Lines;
 use std::path::Path;
 use rand::thread_rng;
 
@@ -17,9 +16,9 @@ pub fn run(_options: &[CommandDataOption]) -> String{
     let mut rng = thread_rng();
 
     match jokes{
-        Ok(jokes) => jokes.choose(&mut rng).unwrap_or(&"Cannot select dad joke".to_string()).to_string(),
+        Ok(jokes) => jokes.choose(&mut rng).unwrap_or(&"Hmm, I can't decide from all of my funny jokes".to_string()).to_string(),
 
-        Err(_) => "Cannot load dad joke".to_string()
+        Err(_) => "Sorry sport, I don't have any jokes to tell right now".to_string()
     }
 }
 
@@ -28,20 +27,12 @@ pub fn register(command: &mut CreateApplicationCommand) -> &mut CreateApplicatio
 }
 
 fn load_dadjokes() -> Result<Vec<String>,()>{
-    let path = Path::new("../dadjokes.txt");
+    let path = Path::new("/home/visedsquirrel/projects/rust/dadbot/dadjokes.txt");
     //let display = path.display();
 
     let jokes = match fs::read_to_string(path){
-        Ok(jokes) => Ok(lines_to_strings(jokes.lines())),
+        Ok(jokes) => Ok(jokes.lines().map(|x| x.replace("<>","\n")).collect()),
         Err(_) => Err(()),
     };
     jokes
-}
-
-fn lines_to_strings(lines: Lines) -> Vec<String>{
-    let mut strings = Vec::new();
-    for line in lines{
-        strings.push(line.to_string());
-    }
-    strings
 }
