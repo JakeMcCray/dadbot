@@ -124,6 +124,7 @@ dependencies = [
 name = "dadbot"
 version = "0.1.0"
 dependencies = [
+ "rand",
  "serenity",
  "tokio",
 ]
