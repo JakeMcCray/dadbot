@@ -9,6 +9,7 @@ use serenity::{
     Client, 
 };
 use serenity::model::application::command::Command;
+//use serenity::http::client::Http::delete_global_application_command;
 
 struct Handler;
 
@@ -53,22 +54,13 @@ impl EventHandler for Handler {
     async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
 
-        /*
-        let guild_id = GuildId(
-            env::var("GUILD_ID")
-                .expect("Expected GUILD_ID in environment")
-                .parse()
-                .expect("GUILD_ID must be an integer"),
-        );
-
-        let commands = GuildId::set_application_commands(&guild_id, &ctx.http, |commands| {
-            commands
-                .create_application_command(|command| commands::joke::register(command))
-        })
-        .await;
-
-        println!("I now have the following guild slash commands: {:#?}", commands);
-        */
+        let unwanted_commands:Vec<u64> = vec![];
+        for command_id in unwanted_commands{
+            match ctx.http.delete_global_application_command(command_id).await{
+                Ok(_) => println!("successfully deleted global application command\n"),
+                Err(_) => println!("unable to delete global application command\n"),
+            }
+        }
 
         let guild_command = Command::create_global_application_command(&ctx.http, |command| {
             commands::joke::register(command)
